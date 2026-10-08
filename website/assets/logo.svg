@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Avançar Liberal">
+  <circle cx="48" cy="54" r="30" fill="none" stroke="#1E9BE0" stroke-width="11"/>
+  <path d="M10 70 C 35 72, 62 55, 80 26" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
+  <path d="M10 70 C 35 72, 62 55, 80 26" fill="none" stroke="#E63946" stroke-width="9" stroke-linecap="round"/>
+  <polygon points="92,10 68,20 86,36" fill="#E63946"/>
+</svg>

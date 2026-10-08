@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junta-te a nós! — Avançar Liberal</title>
+  <link rel="icon" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Junta-te a nós!</h1>
+        <p>Faz parte de um movimento que quer um Portugal mais liberal, mais humanista, sem deixar ninguém para trás.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="grid grid-3">
+          <div class="card"><div class="icon">🙋</div><h3>Voluntariado</h3><p>Ajuda em ações de rua, eventos e campanhas na tua região.</p></div>
+          <div class="card red"><div class="icon">💡</div><h3>Ideias</h3><p>Contribui para o nosso programa nos grupos temáticos.</p></div>
+          <div class="card yellow"><div class="icon">📣</div><h3>Divulgação</h3><p>Partilha a nossa mensagem nas redes sociais e com amigos.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt">
+      <div class="container" style="max-width:780px">
+        <div class="section-title">
+          <span class="eyebrow">Inscrição</span>
+          <h2>Preenche o formulário</h2>
+          <p>Entraremos em contacto contigo para te dar as boas-vindas.</p>
+        </div>
+
+        <form class="form" data-form="adesao" data-success="Bem-vindo(a) ao Avançar Liberal! 🎉 Vamos entrar em contacto contigo muito em breve." novalidate>
+          <div class="form-row">
+            <div class="field">
+              <label for="j-nome">Nome completo *</label>
+              <input id="j-nome" name="nome" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="j-email">Email *</label>
+              <input id="j-email" name="email" type="email" required autocomplete="email">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="j-tel">Telemóvel</label>
+              <input id="j-tel" name="telemovel" type="tel" pattern="[0-9+ ]{9,15}" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="j-idade">Idade</label>
+              <input id="j-idade" name="idade" type="number" min="14" max="120">
+            </div>
+          </div>
+          <div class="field">
+            <label for="j-distrito">Distrito *</label>
+            <select id="j-distrito" name="distrito" required>
+              <option value="">Seleciona…</option>
+              <option>Aveiro</option><option>Beja</option><option>Braga</option><option>Bragança</option>
+              <option>Castelo Branco</option><option>Coimbra</option><option>Évora</option><option>Faro</option>
+              <option>Guarda</option><option>Leiria</option><option>Lisboa</option><option>Portalegre</option>
+              <option>Porto</option><option>Santarém</option><option>Setúbal</option><option>Viana do Castelo</option>
+              <option>Vila Real</option><option>Viseu</option><option>Açores</option><option>Madeira</option>
+              <option>Estrangeiro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Como queres participar?</label>
+            <div class="checks">
+              <label><input type="checkbox" name="participacao" value="voluntariado"> Voluntariado</label>
+              <label><input type="checkbox" name="participacao" value="ideias"> Grupos de ideias</label>
+              <label><input type="checkbox" name="participacao" value="comunicacao"> Comunicação / redes</label>
+              <label><input type="checkbox" name="participacao" value="eventos"> Organização de eventos</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="j-msg">Porque te queres juntar?</label>
+            <textarea id="j-msg" name="motivacao" rows="4"></textarea>
+          </div>
+          <label class="consent field">
+            <input type="checkbox" name="rgpd" required>
+            Aceito que os meus dados sejam tratados pelo Avançar Liberal, nos termos do RGPD. *
+          </label>
+          <label class="consent field">
+            <input type="checkbox" name="newsletter">
+            Quero receber novidades e convites para eventos.
+          </label>
+          <button class="btn btn-primary" type="submit">Quero juntar-me!</button>
+          <div class="form-msg" role="status"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="js/main.js"></script>
+</body>
+</html>
