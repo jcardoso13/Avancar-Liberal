@@ -1,16 +1,150 @@
-# Avancar Liberal
+# Avançar Liberal
 
-Static website for the Avancar Liberal movement and a Python tool for comparing
-Portuguese personal income tax (IRS) scenarios, including social contributions.
+Static Portuguese-language website for Avançar Liberal, with official brand assets,
+a Python tool for comparing personal income tax (IRS) scenarios, and supporting
+policy documents.
+
+- [Website and local preview](#website)
+- [Python setup](#python-setup)
+- [IRS comparison](#irs-comparison)
+- [Land value tax proposal](#land-value-tax-proposal)
 
 ## Project Structure
 
 ```text
-website/                 Static HTML pages, CSS, JavaScript, and assets
+website/                 Deployable static website: HTML, CSS, JavaScript, assets
+assets/                  Visual guide and original Instagram publication archive
+logotipo/02.Logotipo/     Original logos, background variants, and media
+Avançar Website modelo.pdf
+                         Website copy and reference sitemap
 data/comparar_irs.py      IRS comparison and graph export script
 data/requirements.txt    Python dependencies
 data/graphs/             Generated PNG and SVG charts
+lvt/                     Land value tax proposal, summary, and comparisons
 ```
+
+## Website
+
+### Local Preview
+
+Run this command from the repository root:
+
+```bash
+python3 -m http.server 8000 --bind 127.0.0.1 --directory website
+```
+
+Open <http://127.0.0.1:8000/>. If the port is occupied, choose another one.
+Stop the server with `Ctrl+C`.
+
+The website has **no build step, Node.js dependencies, or backend**. Python's
+standard library is enough to preview it; the IRS tool's virtual environment
+and Matplotlib are not needed. Serve it over HTTP rather than opening the HTML
+with `file://`, because the publication archive is loaded with `fetch`.
+
+To publish the site, serve the contents of [website/](website/) from a static
+HTTP host, retaining the relative paths. Source PDFs, the original logo folder,
+and the Python tooling are not required on the host.
+
+### Pages and Navigation
+
+The structure is based on page 7 of
+[Avançar Website modelo.pdf](<Avançar Website modelo.pdf>), narrowed to the
+**Comissão Executiva (CE)** candidature. CN, CJ and CF are not part of the
+current website.
+
+| Page | File | Purpose |
+| --- | --- | --- |
+| Início | [index.html](website/index.html) | Candidature introduction, Liberal Humanismo, three priorities, political positions, and three publication highlights |
+| Liberal Humanismo | [liberal-humanismo.html](website/liberal-humanismo.html) | Principles and practical examples from the supplied model |
+| CE Home | [ce.html](website/ce.html) | Commission candidature landing page |
+| CE / Vídeos | [ce-videos.html](website/ce-videos.html) | Video publication space |
+| CE / Candidato + Equipa | [ce-equipa.html](website/ce-equipa.html) | Candidate and team presentation space |
+| CE / MEG | [ce-meg.html](website/ce-meg.html) | Official candidature document space |
+| Contactos | [contactos.html](website/contactos.html) | Direct email and Instagram contact links |
+| Doações | [doacoes.html](website/doacoes.html) | Donation information space |
+| Publicações | [posts.html](website/posts.html) | Local archive of Instagram publications |
+
+The existing [equipa.html](website/equipa.html),
+[propostas.html](website/propostas.html), and
+[junta-te.html](website/junta-te.html) addresses remain available for team
+navigation, priorities, and participation. They are not primary menu items.
+
+Shared header, footer, active-page indicators, CE subnavigation and mobile-menu
+behavior live in [main.js](website/js/main.js). These shared elements and the
+publication cards require JavaScript.
+
+### Content Awaiting Publication
+
+CE videos, candidate/team biographies, MEG documents, the Liberal Humanismo
+presentation video, and donation details are explicitly marked **Em preparação**.
+Replace those notices only when the corresponding official material is available.
+No payment details, unconfirmed biographies, or placeholder member names are
+published.
+
+Contact and participation use direct links, not submission forms. The email link
+opens the visitor's email application; the website does not collect or store
+messages and does not claim to have delivered them.
+
+### Visual Identity and Logos
+
+[style.css](website/css/style.css) follows the Avançar palette in
+[Cores-e-Letras.pdf](assets/Cores-e-Letras.pdf):
+
+| Color | Hex |
+| --- | --- |
+| Cyan | `#00C3FF` |
+| Navy | `#050487` |
+| Pink | `#FF006B` |
+| Yellow | `#FFE112` |
+| Red | `#FF3C32` |
+| Green | `#00F395` |
+
+Bricolage Grotesque, Figtree and Urbanist are self-hosted in
+[website/assets/fonts/](website/assets/fonts/), alongside their SIL Open Font
+License notices. No external font service is contacted at runtime.
+
+The website uses **unmodified original SVGs**, not recreated artwork or raster
+crops from the PDF:
+
+| Website asset | Source in `logotipo/02.Logotipo/` | Use |
+| --- | --- | --- |
+| [mainlogo.svg](website/assets/mainlogo.svg) | [Avançar_mainlogo.svg](<logotipo/02.Logotipo/Avançar_mainlogo.svg>) | Main symbol and favicon on every page |
+| [logo.svg](website/assets/logo.svg) | [Avançar 2 - Logo.svg](<logotipo/02.Logotipo/Avançar 2 - Logo.svg>) | Full logo on the white header |
+| [avancar-mark.svg](website/assets/avancar-mark.svg) | [Icon Variação A](<logotipo/02.Logotipo/Avançar 2 - Icon Variação A.svg>) | White/red symbol on the cyan hero |
+| [logo-dark.svg](website/assets/logo-dark.svg) | [Logo Variação D](<logotipo/02.Logotipo/Avançar 2 - Logo Variação D.svg>) | White/pink logo on the navy footer |
+
+Choose the supplied variant for the background; preserve the artwork, lettering,
+colors and aspect ratio. Copy any replacement into the website assets so the
+deployed site remains self-contained.
+
+The hero's **two thin concentric rings** are CSS decorations, not part of the
+logo. They are layered above the SVG's opaque background and below the yellow
+label to keep the circles continuous without altering the official artwork.
+
+### Local Publication Archive
+
+[posts.js](website/js/posts.js) reads
+[manifest.json](website/assets/posts/manifest.json) and renders local images from
+[website/assets/posts/](website/assets/posts/). The homepage shows the three
+newest archived posts; the publications page shows all 12, newest first.
+
+This is a **partial archive from July to October 2026**, not a live Instagram
+feed. Some captions are incomplete. The original downloads and metadata are
+retained in [assets/avancarliberal/](assets/avancarliberal/).
+
+To update the archive:
+
+1. Copy the publication images into `website/assets/posts/`.
+2. Update the published manifest with the shortcode, caption, publication
+   timestamp, and local image filename. Follow the existing record format.
+3. Keep `downloaded_media[0].file` consistent with the copied JPG filename;
+   the current renderer displays the first image of each publication.
+4. Check the homepage and publications page over HTTP. Update the archive
+   description and counts if its coverage changes.
+
+Images are lazy-loaded. Loading failures display an explicit message and an
+Instagram link. Instagram is contacted only when a visitor follows an external
+link; there are no Instagram embeds or automatic feed requests.
 
 ## Python Setup
 
@@ -135,64 +269,14 @@ Charts are written to [data/graphs](data/graphs) as PNG and SVG:
 | `imposto_sobre_trabalho` | Annual employer cost: gross + TSU | `(IRS + employee SS + employer TSU) / employer cost` (%) |
 | `receita_total_csv` | Reference table and proposal | Total IRS for the CSV population (EUR; requires `--csv`) |
 
-## Website Preview
+## Land Value Tax Proposal
 
-The [website/index.html](website/index.html) entry point is a static site with no
-build step or Node.js dependencies. To preview it locally:
+[lvt/](lvt/) contains the Portuguese policy documents for a proposed land value
+tax reform:
 
-```bash
-python3 -m http.server 8000 --bind 127.0.0.1 --directory website
-```
+- [Full proposal](lvt/proposta.md)
+- [Summary](lvt/proposta-resumo.md) and [PDF version](lvt/proposta-resumo.pdf)
+- [Comparison](lvt/comparacao.md)
 
-Open <http://127.0.0.1:8000/>. Use another port if 8000 is occupied.
-### Website Structure and Content
-
-The primary navigation is based on page 7 of `Avançar Website modelo.pdf`,
-restricted to the Comissão Executiva candidature:
-
-- Homepage: `website/index.html`
-- Liberal Humanismo: `website/liberal-humanismo.html`
-- Contactos: `website/contactos.html`
-- Doações: `website/doacoes.html`
-- CE: `website/ce.html`, with separate `ce-videos.html`, `ce-equipa.html`
-  and `ce-meg.html` pages.
-
-The homepage and Liberal Humanismo copy are based on the supplied website model.
-Videos, candidates/teams, MEG documents and donation details are explicitly marked
-as in preparation until official material is supplied. No payment details or
-unconfirmed team biographies are fabricated. The existing team, proposals and
-participation URLs remain available, but are no longer primary navigation items.
-Contact and participation now use direct contact links, not browser-only form
-storage that could misleadingly report a message as delivered.
-
-`website/css/style.css` uses the Avançar palette from pages 1–4 of
-`assets/Cores-e-Letras.pdf`: cyan `#00C3FF`, navy `#050487`, pink `#FF006B`,
-yellow `#FFE112`, red `#FF3C32` and green `#00F395`. Bricolage Grotesque,
-Figtree and Urbanist are self-hosted in `website/assets/fonts/`, with their
-SIL Open Font License notices. No font service is contacted at runtime.
-
-Website logos are unmodified SVG copies from `logotipo/02.Logotipo/`:
-
-| Website asset | Original artwork | Use |
-| --- | --- | --- |
-| `website/assets/mainlogo.svg` | `Avançar_mainlogo.svg` | Main symbol / favicon on every page |
-| `website/assets/logo.svg` | `Avançar 2 - Logo.svg` | Original full wordmark on the white header |
-| `website/assets/avancar-mark.svg` | `Avançar 2 - Icon Variação A.svg` | White/red symbol on the cyan homepage hero |
-| `website/assets/logo-dark.svg` | `Avançar 2 - Logo Variação D.svg` | White/pink wordmark on the navy footer |
-
-Keep the original artwork, lettering, colors and aspect ratios unchanged.
-These vector assets replace the recreated logos; no PDF raster crops are used.
-The two thin concentric rings around the homepage hero are CSS decorations,
-layered above the SVG background and below the yellow label. They do not modify
-the official artwork.
-
-`website/posts.html` and the homepage display local images from
-`website/assets/posts/`, copied from `assets/avancarliberal/`. The accompanying
-`manifest.json` is the source for publication dates, captions and filenames.
-This is a partial archive of 12 posts, not a live Instagram feed; captions may be
-incomplete. To refresh it, copy the new images and update the published manifest
-together. The original download manifest is retained in the source assets.
-Instagram is contacted only when a visitor follows an external link.
-
-Serve the site over HTTP using the command above: the local publication manifest
-is loaded with `fetch`, which browsers may block on `file://` URLs.
+These documents describe proposals and illustrative scenarios, not enacted tax
+rules or guaranteed individual savings.
