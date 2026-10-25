@@ -85,7 +85,7 @@ function renderFooter() {
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">${brand(true)}<p>Liberdade, responsabilidade<br>e dignidade humana.</p></div>
-        <div><h2>O movimento</h2><ul>
+        <div><h2>O projeto</h2><ul>
           <li><a href="index.html">Página inicial</a></li>
           <li><a href="liberal-humanismo.html">Liberal Humanismo</a></li>
           <li><a href="contactos.html">Contactos</a></li>
