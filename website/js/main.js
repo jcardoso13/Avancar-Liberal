@@ -1,110 +1,121 @@
 const INSTAGRAM = "https://www.instagram.com/avancarliberal/";
-
-const NAV = [
-  ["index.html", "Página Inicial"],
-  ["equipa.html", "Equipa"],
-  ["propostas.html", "Propostas"],
-  ["posts.html", "Posts"],
-  ["contactos.html", "Contactos"],
-  ["junta-te.html", "Junta-te a nós!", "cta"],
+const ORGANS = [
+  { id: "ce", name: "Comissão Executiva" },
 ];
+const ORGAN_SECTIONS = [
+  { suffix: "", label: "Início" },
+  { suffix: "-videos", label: "Vídeos" },
+  { suffix: "-equipa", label: "Candidato + Equipa" },
+  { suffix: "-meg", label: "MEG" },
+];
+const currentPage = location.pathname.split("/").pop() || "index.html";
+
+function navLink(href, label, className = "") {
+  const active = currentPage === href;
+  return `<a href="${href}"${active ? ' aria-current="page"' : ""} class="${className}${active ? " active" : ""}">${label}</a>`;
+}
+
+function brand(dark = false) {
+  return `<a class="brand" href="index.html" aria-label="Avançar Liberal — Página inicial"><img src="assets/${dark ? "logo-dark" : "logo"}.svg" width="339" height="145" alt="Avançar Liberal"></a>`;
+}
 
 function renderHeader() {
-  const el = document.getElementById("site-header");
-  if (!el) return;
-  const current = location.pathname.split("/").pop() || "index.html";
-  const links = NAV.map(([href, label, cls]) =>
-    `<li><a href="${href}" class="${cls || ""} ${href === current ? "active" : ""}">${label}</a></li>`
-  ).join("");
-  el.className = "site-header";
-  el.innerHTML = `
+  const header = document.getElementById("site-header");
+  if (!header) return;
+  header.className = "site-header";
+  header.innerHTML = `
+    <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
     <nav class="container nav" aria-label="Navegação principal">
-      <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span>Avançar <b>Liberal</b></span></a>
-      <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
-      <ul class="nav-links">${links}</ul>
+      ${brand()}
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu +</button>
+      <ul class="nav-links" id="nav-links">
+        <li>${navLink("index.html", "Início")}</li>
+        <li>${navLink("liberal-humanismo.html", "Liberal Humanismo")}</li>
+        ${ORGANS.map(organ => `
+          <li><details class="nav-group">
+            <summary${currentPage.startsWith(`${organ.id}.`) || currentPage.startsWith(`${organ.id}-`) ? ' class="active"' : ""}>${organ.id.toUpperCase()}</summary>
+            <ul class="nav-submenu" aria-label="${organ.name}">
+              ${ORGAN_SECTIONS.map(section => `<li>${navLink(`${organ.id}${section.suffix}.html`, section.suffix ? section.label : `${organ.id.toUpperCase()} Home`)}</li>`).join("")}
+            </ul>
+          </details></li>`).join("")}
+        <li>${navLink("contactos.html", "Contactos")}</li>
+        <li>${navLink("doacoes.html", "Doações", "nav-donate")}</li>
+      </ul>
     </nav>`;
-  const toggle = el.querySelector(".nav-toggle");
-  const list = el.querySelector(".nav-links");
+  const toggle = header.querySelector(".nav-toggle");
+  const links = header.querySelector(".nav-links");
+  const groups = [...header.querySelectorAll(".nav-group")];
+  function closeMenu() {
+    links.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.textContent = "Menu +";
+    groups.forEach(group => { group.open = false; });
+  }
   toggle.addEventListener("click", () => {
-    const open = list.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", open);
-    toggle.textContent = open ? "✕" : "☰";
+    const open = links.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "Fechar -" : "Menu +";
+  });
+  groups.forEach(group => {
+    group.querySelector("summary").addEventListener("click", () => {
+      groups.filter(other => other !== group).forEach(other => { other.open = false; });
+    });
+  });
+  document.addEventListener("click", event => {
+    if (!header.contains(event.target)) closeMenu();
+  });
+  header.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    const group = event.target.closest(".nav-group");
+    if (group?.open) {
+      group.open = false;
+      group.querySelector("summary").focus();
+    } else {
+      closeMenu();
+      toggle.focus();
+    }
   });
 }
 
 function renderFooter() {
-  const el = document.getElementById("site-footer");
-  if (!el) return;
-  el.className = "site-footer";
-  el.innerHTML = `
-    <div class="container footer-grid">
-      <div>
-        <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span>Avançar Liberal</span></a>
-        <p>Avançar por um Portugal mais liberal, mais humanista, sem deixar ninguém para trás! 🇵🇹 🇪🇺</p>
+  const footer = document.getElementById("site-footer");
+  if (!footer) return;
+  footer.className = "site-footer";
+  footer.innerHTML = `
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">${brand(true)}<p>Liberdade, responsabilidade<br>e dignidade humana.</p></div>
+        <div><h2>O movimento</h2><ul>
+          <li><a href="index.html">Página inicial</a></li>
+          <li><a href="liberal-humanismo.html">Liberal Humanismo</a></li>
+          <li><a href="contactos.html">Contactos</a></li>
+          <li><a href="doacoes.html">Doações</a></li>
+        </ul></div>
+        <div><h2>Candidatura</h2><ul>
+          ${ORGANS.map(organ => `<li><a href="${organ.id}.html">${organ.id.toUpperCase()} — ${organ.name}</a></li>`).join("")}
+        </ul></div>
+        <div><h2>Mantém-te a par</h2><ul>
+          <li><a href="${INSTAGRAM}" target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
+          <li><a href="posts.html">Publicações</a></li>
+          <li><a href="mailto:geral@avancarliberal.pt">geral@avancarliberal.pt</a></li>
+        </ul></div>
       </div>
-      <div>
-        <h4>Navegação</h4>
-        <ul>${NAV.map(([h, l]) => `<li><a href="${h}">${l}</a></li>`).join("")}</ul>
-      </div>
-      <div>
-        <h4>Segue-nos</h4>
-        <ul>
-          <li><a href="${INSTAGRAM}" target="_blank" rel="noopener">📸 Instagram @avancarliberal</a></li>
-          <li><a href="mailto:geral@avancarliberal.pt">✉️ geral@avancarliberal.pt</a></li>
-        </ul>
-      </div>
-    </div>
-    <p class="copy">© ${new Date().getFullYear()} Avançar Liberal. Todos os direitos reservados.</p>`;
+      <div class="footer-bottom"><p>© ${new Date().getFullYear()} Avançar Liberal</p><p>A liberdade é o princípio. As pessoas são o propósito.</p></div>
+    </div>`;
 }
 
-function setupTabs() {
-  const tabs = document.querySelectorAll(".tabs button");
-  if (!tabs.length) return;
-  const items = document.querySelectorAll("[data-area]");
-  tabs.forEach(btn => btn.addEventListener("click", () => {
-    tabs.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    const area = btn.dataset.filter;
-    items.forEach(it => {
-      it.style.display = area === "all" || it.dataset.area === area ? "" : "none";
-    });
-  }));
-}
-
-function setupForms() {
-  document.querySelectorAll("form[data-form]").forEach(form => {
-    const msg = form.querySelector(".form-msg");
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-      msg.className = "form-msg";
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-      const action = form.getAttribute("action");
-      try {
-        // Sem "action" definido (ex.: endpoint Formspree), os dados ficam apenas guardados no navegador.
-        if (action) {
-          const res = await fetch(action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
-          if (!res.ok) throw new Error();
-        } else {
-          const key = "avancar-" + form.dataset.form;
-          const saved = JSON.parse(localStorage.getItem(key) || "[]");
-          saved.push(Object.fromEntries(new FormData(form)));
-          localStorage.setItem(key, JSON.stringify(saved));
-        }
-        msg.textContent = form.dataset.success || "Obrigado! Recebemos a tua mensagem.";
-        msg.classList.add("ok");
-        form.reset();
-      } catch {
-        msg.textContent = "Ocorreu um erro. Tenta novamente ou contacta-nos por email.";
-        msg.classList.add("err");
-      }
-    });
-  });
+function renderOrganNavigation() {
+  const nav = document.getElementById("organ-nav");
+  if (!nav) return;
+  const organ = ORGANS.find(item => item.id === document.body.dataset.organ);
+  if (!organ) throw new Error("Órgão não reconhecido na navegação da candidatura.");
+  nav.className = "subnav";
+  nav.setAttribute("aria-label", `Navegação da candidatura à ${organ.id.toUpperCase()}`);
+  nav.innerHTML = `<div class="container">${ORGAN_SECTIONS.map(section =>
+    navLink(`${organ.id}${section.suffix}.html`, section.suffix ? section.label : `${organ.id.toUpperCase()} Home`)
+  ).join("")}</div>`;
 }
 
 renderHeader();
 renderFooter();
-setupTabs();
-setupForms();
+renderOrganNavigation();

@@ -145,5 +145,51 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory website
 ```
 
 Open <http://127.0.0.1:8000/>. Use another port if 8000 is occupied.
-Instagram embeds on the posts page require an Internet connection and may be
-affected by browser privacy settings or Instagram availability.
+### Website Structure and Content
+
+The primary navigation is based on page 7 of `Avançar Website modelo.pdf`,
+restricted to the Comissão Executiva candidature:
+
+- Homepage: `website/index.html`
+- Liberal Humanismo: `website/liberal-humanismo.html`
+- Contactos: `website/contactos.html`
+- Doações: `website/doacoes.html`
+- CE: `website/ce.html`, with separate `ce-videos.html`, `ce-equipa.html`
+  and `ce-meg.html` pages.
+
+The homepage and Liberal Humanismo copy are based on the supplied website model.
+Videos, candidates/teams, MEG documents and donation details are explicitly marked
+as in preparation until official material is supplied. No payment details or
+unconfirmed team biographies are fabricated. The existing team, proposals and
+participation URLs remain available, but are no longer primary navigation items.
+Contact and participation now use direct contact links, not browser-only form
+storage that could misleadingly report a message as delivered.
+
+`website/css/style.css` uses the Avançar palette from pages 1–4 of
+`assets/Cores-e-Letras.pdf`: cyan `#00C3FF`, navy `#050487`, pink `#FF006B`,
+yellow `#FFE112`, red `#FF3C32` and green `#00F395`. Bricolage Grotesque,
+Figtree and Urbanist are self-hosted in `website/assets/fonts/`, with their
+SIL Open Font License notices. No font service is contacted at runtime.
+
+Website logos are unmodified SVG copies from `logotipo/02.Logotipo/`:
+
+| Website asset | Original artwork | Use |
+| --- | --- | --- |
+| `website/assets/mainlogo.svg` | `Avançar_mainlogo.svg` | Main symbol / favicon on every page |
+| `website/assets/logo.svg` | `Avançar 2 - Logo.svg` | Original full wordmark on the white header |
+| `website/assets/avancar-mark.svg` | `Avançar 2 - Icon Variação A.svg` | White/red symbol on the cyan homepage hero |
+| `website/assets/logo-dark.svg` | `Avançar 2 - Logo Variação D.svg` | White/pink wordmark on the navy footer |
+
+Keep the original artwork, lettering, colors and aspect ratios unchanged.
+These vector assets replace the recreated logos; no PDF raster crops are used.
+
+`website/posts.html` and the homepage display local images from
+`website/assets/posts/`, copied from `assets/avancarliberal/`. The accompanying
+`manifest.json` is the source for publication dates, captions and filenames.
+This is a partial archive of 12 posts, not a live Instagram feed; captions may be
+incomplete. To refresh it, copy the new images and update the published manifest
+together. The original download manifest is retained in the source assets.
+Instagram is contacted only when a visitor follows an external link.
+
+Serve the site over HTTP using the command above: the local publication manifest
+is loaded with `fetch`, which browsers may block on `file://` URLs.
