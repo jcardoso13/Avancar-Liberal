@@ -182,6 +182,9 @@ Website logos are unmodified SVG copies from `logotipo/02.Logotipo/`:
 
 Keep the original artwork, lettering, colors and aspect ratios unchanged.
 These vector assets replace the recreated logos; no PDF raster crops are used.
+The two thin concentric rings around the homepage hero are CSS decorations,
+layered above the SVG background and below the yellow label. They do not modify
+the official artwork.
 
 `website/posts.html` and the homepage display local images from
 `website/assets/posts/`, copied from `assets/avancarliberal/`. The accompanying
